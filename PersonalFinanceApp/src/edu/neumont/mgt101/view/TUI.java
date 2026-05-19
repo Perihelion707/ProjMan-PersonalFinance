@@ -3,30 +3,30 @@ package edu.neumont.mgt101.view;
 import java.util.Scanner;
 
 public class TUI {
-    private final Scanner scanner;
+    private static Scanner scanner = null;
 
     public TUI() {
-        this.scanner = new Scanner(System.in);
+        scanner = new Scanner(System.in);
     }
 
-    public void println(String text) {
+    public static void println(String text) {
         System.out.println(text);
     }
 
-    public String inputString() {
+    public static String inputString() {
         return scanner.nextLine();
     }
 
-    public void printSeperator() {
+    public static void printSeparator() {
         System.out.println("----------------------------------------");
     }
 
 
-    public void printIncomeAndExpenses() {
+    public static void printIncomeAndExpenses() {
         System.out.println("Displaying Income and Expenses...");
     }
 
-    public int inputMenuOption(String prompt) {
+    public static int inputMenuOption(String prompt) {
         while (true) {
             System.out.print(prompt);
             String input = scanner.nextLine().trim();
