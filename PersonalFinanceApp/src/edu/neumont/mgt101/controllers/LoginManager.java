@@ -15,6 +15,7 @@ import java.util.Scanner;
 
 public class LoginManager {
     private final String LOGIN_SAVE_PATH = "./LoginData.txt";
+    private final String LOGIN_LOG = "./LoginLog.txt";
 
     private ArrayList<User> userAccounts;
     private User currentUser = null;
@@ -35,35 +36,37 @@ public class LoginManager {
         return true;
     }
 
-    public void writeLoginData(){
-
-        File file = new File(LOGIN_SAVE_PATH);
-        if (Files.exists(Paths.get(LOGIN_SAVE_PATH))){
-            System.out.println("Login data has been found successfully.");
-        }
-
-        try{
-            if (file.createNewFile()){
-                System.out.println("Login data has been created successfully.");
-            }else{
-                System.out.println("Login data has been not been created.");
+    public void writeData(String path, String data){
+        File file = new File(path);
+        if (Files.exists(Paths.get(path)) == false){
+            //System.out.println("Login data has been found successfully.");
+            try {
+                file.createNewFile();
+            }catch (IOException e){
+                e.printStackTrace();
             }
-        } catch(IOException e){
-            e.printStackTrace();
-            return;
         }
-
         try {
-            FileWriter fw = new FileWriter(LOGIN_SAVE_PATH, true);
-            fw.write("\nim just a little guy and this is a little test.");
+            FileWriter fw = new FileWriter(path, true);
+            fw.write("\n");
+            fw.write(data);
             fw.close();
         }catch(IOException e){
             e.printStackTrace();
         }
     }
 
-    public String readFile(){
-        File file = new File(LOGIN_SAVE_PATH);
+    public void writeLoginData(){
+        if (currentUser == null){
+            return;
+        }
+        writeData(LOGIN_LOG, currentUser.name + " Logged in");
+        //writeData(LOGIN_SAVE_PATH, " in");
+
+    }
+
+    public String readFile(String path){
+        File file = new File(path);
         StringBuilder content = new StringBuilder();
         try (Scanner reader = new Scanner(file)) {
             while (reader.hasNextLine()) {
@@ -75,5 +78,16 @@ public class LoginManager {
             fnfe.printStackTrace();
         }
         return content.toString();
+    }
+
+    public void parseLoginData() {
+
+    }
+
+    public void testWriteReadData(){
+        writeLoginData();
+        readFile(LOGIN_SAVE_PATH);
+        System.out.println("\n");
+        readFile(LOGIN_LOG);
     }
 }

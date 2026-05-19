@@ -5,5 +5,6 @@ import edu.neumont.mgt101.controllers.LoginManager;
 
 public class Main {
     public static void main() {
+     
     }
 }
