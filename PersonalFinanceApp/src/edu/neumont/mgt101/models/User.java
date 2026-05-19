@@ -1,12 +1,14 @@
 package edu.neumont.mgt101.models;
 
+import java.util.ArrayList;
+
 public class User {
     public String name;
     public String userName;
     private String password;
     private double money;
-    //public ArrayList<FinancialGoal> financialGoals;
-    //public ArrayList<Transaction> transactions;
+    public ArrayList<FinancialGoal> financialGoals;
+    public ArrayList<Transaction> transactions;
 
 
     public User(String name, double money, String userName, String password) {
