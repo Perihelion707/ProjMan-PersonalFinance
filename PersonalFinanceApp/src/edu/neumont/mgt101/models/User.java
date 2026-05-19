@@ -3,8 +3,8 @@ package edu.neumont.mgt101.models;
 import java.util.ArrayList;
 
 public class User {
-    public String name;
-    public String userName;
+    private String name;
+    private String userName;
     private String password;
     private double money;
     public ArrayList<FinancialGoal> financialGoals;
@@ -18,12 +18,20 @@ public class User {
         setPassword(password);
     }
 
+    public String getName() {
+        return name;
+    }
+
     public void setName(String name) {
         if(name != null && !name.isBlank()) {
             this.name = name;
         } else {
             this.name = "UNKNOWN";
         }
+    }
+
+    public String getUserName() {
+        return userName;
     }
 
     public void setUserName(String userName) {
