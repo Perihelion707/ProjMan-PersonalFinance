@@ -10,7 +10,13 @@ public class FinanceController
 
     public void run(){}
     public void login(){}
-    public void mainMenu(){}
+    public int mainMenu(){
+        TUI.println("1. Deposit Money " +
+                "\n2. Withdraw Money " +
+                "\n3. Add Finance " +
+                "\n4. Add Transaction ");
+        return TUI.inputMenuOption("What would you like to do?");
+    }
     /**
      * Asks the User for Financial Goal Parameters and then adds that goal to the user
      */
