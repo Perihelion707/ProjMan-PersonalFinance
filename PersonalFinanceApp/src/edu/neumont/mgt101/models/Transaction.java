@@ -70,4 +70,22 @@ public class Transaction {
         setTransactionDescription(transactionDescription);
         setMoneyAmount(moneyAmount);
     }
+
+    @Override
+    public String toString() {
+        if (transactionDescription == null || transactionDescription.isBlank())
+            return
+                    "Type of Transaction: " + transactionType +
+                    ", Name: " + transactionName + '\'' +
+                    ", Amount: " + moneyAmount;
+
+        else
+        {
+            return
+                    "Type of Transaction: " + transactionType +
+                    ", Name: " + transactionName + '\'' +
+                    ", Description: " + transactionDescription + '\'' +
+                    ", Amount: " + moneyAmount;
+        }
+    }
 }

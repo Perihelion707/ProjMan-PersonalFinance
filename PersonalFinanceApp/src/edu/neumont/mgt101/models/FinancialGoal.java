@@ -60,5 +60,12 @@ public class FinancialGoal
         setDaysLeft(daysLeft);
         setIsComplete(isComplete);
     }
+
+    @Override
+    public String toString() {
+        return "Max Spend Amount: " + moneyTarget +
+                ", Goal Name: " + goalName + '\'' +
+                ", Days lefts: " + daysLeft;
+    }
 }
 
