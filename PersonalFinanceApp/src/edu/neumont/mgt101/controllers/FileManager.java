@@ -20,29 +20,6 @@ import javax.naming.Name;
 public class FileManager {
     static final private String USER_SAVE_FILE = "Users";
 
-    public static void testJsonFile(){
-        User testUser = new User(
-                "bob",
-                12.0,
-                "bob-username",
-                "1234"
-        );
-        testUser.financialGoals = new ArrayList<FinancialGoal>();
-        testUser.transactions = new ArrayList<Transaction>();
-        testUser.financialGoals.add(new FinancialGoal(
-                100,
-                "testGoal",
-                12,
-                false
-        ));
-
-        //writeUserData(testUser);
-        List<User> users = getUserAccounts();
-        users.addFirst(testUser);
-        //readFile(USER_SAVE_FILE);
-        saveUserAccounts(users);
-    }
-
     public static void writeUserData(User user){
         writeUserData(user, true);
     }

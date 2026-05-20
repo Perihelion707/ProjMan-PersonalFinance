@@ -7,8 +7,8 @@ public class User {
     private String userName;
     private String password;
     private double money;
-    public ArrayList<FinancialGoal> financialGoals;
-    public ArrayList<Transaction> transactions;
+    public ArrayList<FinancialGoal> financialGoals = new ArrayList<>();
+    public ArrayList<Transaction> transactions = new ArrayList<>();
 
 
     public User(String name, double money, String userName, String password) {
