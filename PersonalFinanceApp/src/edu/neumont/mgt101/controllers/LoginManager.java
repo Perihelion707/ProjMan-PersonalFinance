@@ -19,8 +19,8 @@ public class LoginManager {
         this.currentUser = currentUser;
     }
 
-    public void login(String username, String password) {
-
+    public User login(String username, String password) {
+        return null;
     }
 
     public boolean isLoggedIn(){

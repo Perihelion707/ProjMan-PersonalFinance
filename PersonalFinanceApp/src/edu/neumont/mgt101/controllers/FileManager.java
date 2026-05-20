@@ -36,15 +36,17 @@ public class FileManager {
                 false
         ));
 
-        writeUserData(testUser);
+        //writeUserData(testUser);
         List<User> users = getUserAccounts();
-        for(User user : users){
-            System.out.println(user);
-        }
+        users.add(testUser);
         //readFile(USER_SAVE_FILE);
+        saveUserAccounts(users);
     }
 
     public static void writeUserData(User user){
+        writeUserData(user, true);
+    }
+    public static void writeUserData(User user, boolean append){
         StringBuilder sb = new StringBuilder();
         sb.append(user.getName());
         sb.append(',');
@@ -57,6 +59,8 @@ public class FileManager {
         sb.append('[');
         if (!user.financialGoals.isEmpty()){
             for (FinancialGoal goal : user.financialGoals) {
+                if (goal == null)
+                    continue;
                 sb.append(goal.getGoalName());
                 sb.append('-');
                 sb.append(goal.getMoneyTarget());
@@ -73,6 +77,8 @@ public class FileManager {
         if (!user.transactions.isEmpty()) {
 
             for (Transaction transaction : user.transactions) {
+                if (transaction == null)
+                    continue;
                 sb.append(transaction.getTransactionName());
                 sb.append('-');
                 sb.append(transaction.getTransactionDescription());
@@ -84,10 +90,15 @@ public class FileManager {
         }
         sb.append(']');
         //sb.append("\n");
-        writeData(USER_SAVE_FILE, sb.toString());
+        writeData(USER_SAVE_FILE, sb.toString(), append);
     }
 
-    public static void writeData(String path, String data){
+    public static void writeData(String fileName, String data){
+        writeData(fileName, data, true);
+    }
+
+    public static void writeData(String path, String data,  Boolean append)
+    {
         File file = new File(path);
         if (Files.exists(Paths.get(path)) == false){
             //System.out.println("Login data has been found successfully.");
@@ -98,7 +109,7 @@ public class FileManager {
             }
         }
         try {
-            FileWriter fw = new FileWriter(path, true);
+            FileWriter fw = new FileWriter(path, append);
             fw.write(data);
             fw.write("<\n");
             fw.close();
@@ -106,7 +117,6 @@ public class FileManager {
             e.printStackTrace();
         }
     }
-
 
     public static String readFile(String path){
         File file = new File(path);
@@ -176,7 +186,7 @@ public class FileManager {
         );
     }
 
-    public static User parseUserFromSave(String save) {
+    private static User parseUserFromSave(String save) {
         String[] lines = save.split(",");
         if (lines.length != 6)
             return null;
@@ -231,5 +241,12 @@ public class FileManager {
             userAccounts.add(user);
         }
         return userAccounts;
+    }
+
+    public static void saveUserAccounts(List<User> userAccounts){
+        writeData(USER_SAVE_FILE, "", false);
+        for (User user : userAccounts){
+            writeUserData(user, true);
+        }
     }
 }
