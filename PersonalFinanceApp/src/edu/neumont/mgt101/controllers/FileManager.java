@@ -38,7 +38,7 @@ public class FileManager {
 
         //writeUserData(testUser);
         List<User> users = getUserAccounts();
-        users.add(testUser);
+        users.addFirst(testUser);
         //readFile(USER_SAVE_FILE);
         saveUserAccounts(users);
     }
@@ -46,6 +46,7 @@ public class FileManager {
     public static void writeUserData(User user){
         writeUserData(user, true);
     }
+
     public static void writeUserData(User user, boolean append){
         StringBuilder sb = new StringBuilder();
         sb.append(user.getName());
@@ -231,7 +232,7 @@ public class FileManager {
 
     public static List<User> getUserAccounts(){
         String save = readFile(USER_SAVE_FILE);
-        System.out.println("SAVE:" + save);
+        //System.out.println("SAVE:" + save);
         String[] lines = save.split("<");
         if (lines.length < 1)
             return null;
@@ -246,6 +247,8 @@ public class FileManager {
     public static void saveUserAccounts(List<User> userAccounts){
         writeData(USER_SAVE_FILE, "", false);
         for (User user : userAccounts){
+            if (user == null)
+                continue;
             writeUserData(user, true);
         }
     }

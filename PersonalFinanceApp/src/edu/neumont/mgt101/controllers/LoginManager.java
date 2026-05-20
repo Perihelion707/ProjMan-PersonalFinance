@@ -3,12 +3,13 @@ package edu.neumont.mgt101.controllers;
 import edu.neumont.mgt101.models.User;
 
 import java.util.ArrayList;
+import java.util.List;
 
 
 public class LoginManager {
     private final String LOGIN_LOG = "./LoginLog.txt";
 
-    private ArrayList<User> userAccounts;
+    private List<User> userAccounts;
     private User currentUser = null;
 
     public User getCurrentUser() {
@@ -20,6 +21,13 @@ public class LoginManager {
     }
 
     public User login(String username, String password) {
+        userAccounts = FileManager.getUserAccounts();
+        for  (User user : userAccounts) {
+            if (user.getUserName().equals(username) && user.getPassword().equals(password)) {
+                currentUser = user;
+                return user;
+            }
+        }
         return null;
     }
 
