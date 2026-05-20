@@ -15,7 +15,7 @@ public class FinanceController
                 "\n2. Withdraw Money " +
                 "\n3. Add Finance " +
                 "\n4. Add Transaction ");
-        return TUI.inputMenuOption("What would you like to do?");
+        return TUI.inputMenuOption("What would you like to do?",1,4);
     }
     /**
      * Asks the User for Financial Goal Parameters and then adds that goal to the user

@@ -26,12 +26,17 @@ public class TUI {
         System.out.println("Displaying Income and Expenses...");
     }
 
-    public static int inputMenuOption(String prompt) {
+    public static int inputMenuOption(String prompt, int min, int max) {
         while (true) {
             System.out.print(prompt);
             String input = scanner.nextLine().trim();
             try {
-                return Integer.parseInt(input);
+                int output = Integer.parseInt(input);
+                if (output < min || output > max) {
+                    return output;
+                } else {
+                    System.out.println("That value isn't allowed. Please pick a number between " + min + "-" + max + ".");
+                }
             } catch (NumberFormatException e) {
                 System.out.println("Invalid input. Please enter a valid whole number.");
             }
