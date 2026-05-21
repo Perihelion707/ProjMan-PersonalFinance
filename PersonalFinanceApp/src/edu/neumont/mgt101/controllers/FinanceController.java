@@ -8,6 +8,7 @@ import edu.neumont.mgt101.view.TUI;
 
 public class FinanceController
 {
+    private final LoginManager loginManager = new LoginManager();
     private User currUser;
 
     public void run(){}
@@ -49,6 +50,9 @@ public class FinanceController
     }
     public void changeIncome(){}
     public void changeExpenses(){}
+    /**
+     * Asks the user for a transaction type, name, description, and money amount. Allows user to not include description if they don't want it.
+     */
     public void addTransaction()
     {
         while(true)
@@ -101,5 +105,9 @@ public class FinanceController
             }
         }
     }
-    public void saveAndLogout(){}
+    public void saveAndLogout()
+    {
+        FileManager.writeUserData(currUser);
+        loginManager.logout();
+    }
 }
