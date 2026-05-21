@@ -1,6 +1,7 @@
 package edu.neumont.mgt101.controllers;
 
 import edu.neumont.mgt101.models.FinancialGoal;
+import edu.neumont.mgt101.models.Transaction;
 import edu.neumont.mgt101.models.User;
 import edu.neumont.mgt101.view.TUI;
 
@@ -45,7 +46,7 @@ public class FinanceController
             }
         }
     }
-    public void changeIncome(){}
+    public void changeIncome(double newMoney, User currUser){}
     public void changeExpenses(){}
     public void addTransaction(){}
     public void saveAndLogout(){}

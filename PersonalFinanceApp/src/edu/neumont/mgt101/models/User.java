@@ -72,4 +72,8 @@ public class User {
                 ", password='" + password + '\'' +
                 '}';
     }
+
+//    currUser.setMoney(newMoney);
+
+//    Transaction newTransaction = new Transaction();
 }

@@ -42,4 +42,22 @@ public class TUI {
             }
         }
     }
+
+    public boolean yesOrNoHandler(String prompt){
+        String yesOrNo;
+        boolean incorrectInput = true;
+        do {
+            yesOrNo = Console.getStringInput(prompt + "\n(Yes or No)", false);
+            if (yesOrNo.equalsIgnoreCase("Yes") || yesOrNo.equalsIgnoreCase("No")) {
+                incorrectInput = false;
+            }else{
+                Console.writeLn("You must enter Yes or No!", Console.TextColor.RED);
+            }
+        }while(incorrectInput);
+        if(yesOrNo.equalsIgnoreCase("Yes")){
+            return true;
+        } else{
+            return false;
+        }
+    }
 }
