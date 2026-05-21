@@ -1,5 +1,7 @@
 package edu.neumont.mgt101.models;
 
+import edu.neumont.mgt101.view.TUI;
+
 import java.util.ArrayList;
 
 public class User {
@@ -73,7 +75,9 @@ public class User {
                 '}';
     }
 
-//    currUser.setMoney(newMoney);
-
-//    Transaction newTransaction = new Transaction();
+//    public void changeIncome(User currUser, double income){
+//        currUser.setMoney(income);
+//        boolean wouldLikeDescription = TUI.yesOrNoHandler();
+//        Transaction newTransaction = new Transaction();
+//    }
 }

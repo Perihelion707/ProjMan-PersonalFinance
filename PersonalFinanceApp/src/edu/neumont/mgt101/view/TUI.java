@@ -43,7 +43,7 @@ public class TUI {
         }
     }
 
-    public boolean yesOrNoHandler(String prompt){
+    public static boolean yesOrNoHandler(String prompt){
         String yesOrNo;
         boolean incorrectInput = true;
         do {
