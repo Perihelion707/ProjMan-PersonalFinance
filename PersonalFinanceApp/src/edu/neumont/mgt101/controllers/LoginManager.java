@@ -54,6 +54,10 @@ public class LoginManager {
         return true;
     }
 
+    public void logout(){
+        currentUser = null;
+    }
+
     public void writeLoginData(){
         if (currentUser == null){
             return;
