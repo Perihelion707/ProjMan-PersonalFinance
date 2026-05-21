@@ -18,6 +18,7 @@ import edu.neumont.mgt101.models.User;
 import javax.naming.Name;
 
 public class FileManager {
+    static final private int ENCRYPTION_KEY = 632146;
     static final private String USER_SAVE_FILE = "Users";
 
     public static void writeUserData(User user){
@@ -75,8 +76,7 @@ public class FileManager {
         writeData(fileName, data, true);
     }
 
-    public static void writeData(String path, String data,  Boolean append)
-    {
+    public static void writeData(String path, String data,  Boolean append) {
         File file = new File(path);
         if (Files.exists(Paths.get(path)) == false){
             //System.out.println("Login data has been found successfully.");
@@ -88,7 +88,7 @@ public class FileManager {
         }
         try {
             FileWriter fw = new FileWriter(path, append);
-            fw.write(data);
+            fw.write(encryptData(data));
             fw.write("<\n");
             fw.close();
         }catch(IOException e){
@@ -100,8 +100,9 @@ public class FileManager {
         File file = new File(path);
         StringBuilder content = new StringBuilder();
         try (Scanner reader = new Scanner(file)) {
+
             while (reader.hasNextLine()) {
-                String line = reader.nextLine();
+                String line = decryptData(reader.nextLine());
                 content.append(line);
                 System.out.println(line);
             }
@@ -228,5 +229,27 @@ public class FileManager {
                 continue;
             writeUserData(user, true);
         }
+    }
+
+    //todo: after testing the encyption and decryption make everything static
+    private static String encryptData(String data){
+        String encryptedData = "";
+        for (int charIndex = 0; charIndex < data.length(); charIndex++){
+            char currentChar = data.charAt(charIndex);
+            if (currentChar != '\n')
+                currentChar = (char)((int) currentChar + ENCRYPTION_KEY);
+            encryptedData += currentChar;
+        }
+        return encryptedData;
+    }
+    private static String decryptData(String data){
+        String encryptedData = "";
+        for (int charIndex = 0; charIndex < data.length(); charIndex++){
+            char currentChar = data.charAt(charIndex);
+            if (currentChar != '\n')
+                currentChar = (char)((int) currentChar - ENCRYPTION_KEY);
+            encryptedData += currentChar;
+        }
+        return encryptedData;
     }
 }
