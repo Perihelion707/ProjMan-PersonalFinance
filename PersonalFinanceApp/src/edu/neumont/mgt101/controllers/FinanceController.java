@@ -1,6 +1,8 @@
 package edu.neumont.mgt101.controllers;
 
 import edu.neumont.mgt101.models.FinancialGoal;
+import edu.neumont.mgt101.models.Transaction;
+import edu.neumont.mgt101.models.TransactionType;
 import edu.neumont.mgt101.models.User;
 import edu.neumont.mgt101.view.TUI;
 
@@ -47,6 +49,57 @@ public class FinanceController
     }
     public void changeIncome(){}
     public void changeExpenses(){}
-    public void addTransaction(){}
+    public void addTransaction()
+    {
+        while(true)
+        {
+            try
+            {
+                TUI.println("What Type is this Transaction? (D/W)");
+                String transactionString = TUI.inputString();
+                TransactionType transactionType;
+                if (transactionString.equalsIgnoreCase("D"))
+                {
+                    transactionType = TransactionType.DEPOSIT;
+                }
+                else if (transactionString.equalsIgnoreCase("W"))
+                {
+                    transactionType = TransactionType.WITHDRAWAL;
+                }
+                else
+                {
+                    TUI.println("Invalid Transaction");
+                    continue;
+                }
+                TUI.println("What is the transaction name?");
+                String transactionName = TUI.inputString();
+                TUI.println("What was the amount of money involved with the transaction?");
+                String moneyString = TUI.inputString();
+                float money = Float.parseFloat(moneyString);
+                TUI.println("Would you like to add a description to the this transaction?");
+                String description = TUI.inputString();
+                if (description.equalsIgnoreCase("Y"))
+                {
+                    TUI.println("What is the description?");
+                    description = TUI.inputString();
+                    Transaction transaction = new Transaction(transactionType, transactionName, description, money);
+                    currUser.transactions.add(transaction);
+                    TUI.println("Transaction stored");
+                    break;
+                }
+                else
+                {
+                    Transaction transaction = new Transaction(transactionType, transactionName, money);
+                    currUser.transactions.add(transaction);
+                    TUI.println("Transaction stored");
+                    break;
+                }
+            }
+            catch (Exception e)
+            {
+                TUI.println("Invalid input type");
+            }
+        }
+    }
     public void saveAndLogout(){}
 }
