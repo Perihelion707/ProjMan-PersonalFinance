@@ -149,9 +149,9 @@ public class FileManager {
         String transactionName = attributes[0];
         String transactionDescription = attributes[1];
         TransactionType transactionType;
-        int transactionMoneyAmount;
+        double transactionMoneyAmount;
         try{
-            transactionMoneyAmount = Integer.parseInt(attributes[3]);
+            transactionMoneyAmount = Double.parseDouble(attributes[3]);
             transactionType = TransactionType.valueOf(attributes[2]);
         }catch (IllegalArgumentException e){
             return null;

@@ -75,9 +75,4 @@ public class User {
                 '}';
     }
 
-//    public void changeIncome(User currUser, double income){
-//        currUser.setMoney(income);
-//        boolean wouldLikeDescription = TUI.yesOrNoHandler();
-//        Transaction newTransaction = new Transaction();
-//    }
 }

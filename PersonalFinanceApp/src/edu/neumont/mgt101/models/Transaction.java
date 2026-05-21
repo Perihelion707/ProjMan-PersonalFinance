@@ -4,7 +4,7 @@ public class Transaction {
     private TransactionType transactionType;
     private String transactionName;
     private String transactionDescription;
-    private float moneyAmount;
+    private double moneyAmount;
 
     //region Getters and Setters
     public TransactionType getTransactionType() {
@@ -43,11 +43,11 @@ public class Transaction {
         this.transactionDescription = transactionDescription;
     }
 
-    public float getMoneyAmount() {
+    public double getMoneyAmount() {
         return moneyAmount;
     }
 
-    public void setMoneyAmount(float moneyAmount)
+    public void setMoneyAmount(double moneyAmount)
     {
         if  (moneyAmount < 0)
         {
@@ -58,13 +58,13 @@ public class Transaction {
     //endregion
 
 
-    public Transaction(TransactionType transactionType, String transactionName, String transactionDescription, float moneyAmount) {
+    public Transaction(TransactionType transactionType, String transactionName, String transactionDescription, double moneyAmount) {
         setTransactionType(transactionType);
         setTransactionName(transactionName);
         setTransactionDescription(transactionDescription);
         setMoneyAmount(moneyAmount);
     }
-    public Transaction(TransactionType transactionType, String transactionName, float moneyAmount) {
+    public Transaction(TransactionType transactionType, String transactionName, double moneyAmount) {
         setTransactionType(transactionType);
         setTransactionName(transactionName);
         setTransactionDescription(transactionDescription);
