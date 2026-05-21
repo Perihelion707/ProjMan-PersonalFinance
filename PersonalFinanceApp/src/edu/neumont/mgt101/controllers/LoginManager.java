@@ -31,8 +31,31 @@ public class LoginManager {
         return null;
     }
 
+    public void createAccount(User user) {
+        FileManager.writeUserData(user, true);
+    }
+
+    public void createAccount(
+            String name,
+            String username,
+            String password,
+            double money
+    ){
+        User user = new User(
+               name,
+               money,
+               username,
+               password
+        );
+        createAccount(user);
+    }
+
     public boolean isLoggedIn(){
         return true;
+    }
+
+    public void logout(){
+        currentUser = null;
     }
 
     public void writeLoginData(){
@@ -41,10 +64,5 @@ public class LoginManager {
         }
         FileManager.writeData(LOGIN_LOG, currentUser.getName() + " Logged in");
         //writeData(LOGIN_SAVE_PATH, " in");
-    }
-
-
-    public void parseLoginData() {
-
     }
 }
