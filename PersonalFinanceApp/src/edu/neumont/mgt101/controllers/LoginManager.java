@@ -51,7 +51,7 @@ public class LoginManager {
     }
 
     public boolean isLoggedIn(){
-        return true;
+        return currentUser != null;
     }
 
     public void logout(){
