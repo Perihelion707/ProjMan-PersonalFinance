@@ -14,11 +14,13 @@ public class FinanceController
     public void run(){}
     public void login(){}
     public int mainMenu(){
-        TUI.println("1. Deposit Money " +
-                "\n2. Withdraw Money " +
-                "\n3. Add Finance " +
-                "\n4. Add Transaction ");
-        return TUI.inputMenuOption("What would you like to do?",1,4);
+        //Print user info
+        TUI.println("1. Add Transaction " +
+                "\n2. View Transaction History " +
+                "\n3. Add Goal " +
+                "\n4. View Goals " +
+                "\n5. Exit ");
+        return TUI.inputMenuOption("What would you like to do?",1,5);
     }
     /**
      * Asks the User for Financial Goal Parameters and then adds that goal to the user
@@ -50,15 +52,16 @@ public class FinanceController
     }
     public void changeIncome(User currUser, double income, String transactionName){
         currUser.setMoney(income);
+        Transaction newTransaction;
         boolean wouldLikeDescription = TUI.yesOrNoHandler("Would you like to add a description to your transaction?");
         if(wouldLikeDescription){
             TUI.println("Enter the description for your transaction.");
             String description = TUI.inputString();
-            Transaction newTransaction = new Transaction(TransactionType.DEPOSIT, transactionName, description, income);
+            newTransaction = new Transaction(TransactionType.DEPOSIT, transactionName, description, income);
         } else {
-            Transaction newTransaction = new Transaction(TransactionType.DEPOSIT, transactionName, income);
+            newTransaction = new Transaction(TransactionType.DEPOSIT, transactionName, income);
         }
-
+        currUser.transactions.add(newTransaction);
     }
     public void changeExpenses(){}
     /**
