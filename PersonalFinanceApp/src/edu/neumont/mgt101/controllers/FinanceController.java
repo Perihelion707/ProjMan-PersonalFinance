@@ -250,7 +250,25 @@ public class FinanceController
 
     public void viewGoals()
     {
-
+        if(currUser.financialGoals.isEmpty()){
+            TUI.println("You have no goals set");
+        }else {
+            int i = 1;
+            TUI.println("Completed Goals");
+            for (FinancialGoal goal : currUser.financialGoals) {
+                if(goal.getIsComplete()) {
+                    TUI.println(i + ". " + goal.toString());
+                    i++;
+                }
+            }
+            TUI.println("Incomplete Goals");
+            for (FinancialGoal goal : currUser.financialGoals) {
+                if(!goal.getIsComplete()) {
+                    TUI.println(i + ". " + goal.toString());
+                    i++;
+                }
+            }
+        }
     }
 
     public void createUserAccount()
