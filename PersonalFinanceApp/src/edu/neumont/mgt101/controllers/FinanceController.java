@@ -12,16 +12,68 @@ public class FinanceController
     private final LoginManager loginManager = new LoginManager();
     private User currUser;
 
-    public void run(){}
-    public void login(){}
+    public void run()
+    {
+        while (true) {
+            int userChoice = Console.getIntInput("What would you like to do? 1. Login 2. Create Account 3. Exit App");
+            switch (userChoice)
+            {
+                case 1 -> login();
+                case 2 -> createUserAccount();
+
+            }
+            while (true) {
+                userChoice = mainMenu();
+
+                switch (userChoice) {
+                    case 1 -> addTransaction();
+                    case 2 -> viewTransactionHistory();
+                    case 3 -> addGoal();
+                    case 4 -> viewGoals();
+                    case 5 -> removeGoal();
+                    case 6 -> removeGoal(); // change this to complete goal
+                    case 7 -> removeTransaction();
+                    case 8 -> saveAndLogout();
+                    default -> mainMenu();
+                }
+
+                if (userChoice == 8)
+                {
+                    break;
+                }
+            }
+            break; //remove this later
+        }
+    }
+    public void login()
+    {
+        while (true)
+        {
+            String username = Console.getStringInput("Enter Username: ");
+            String password = Console.getStringInput("Enter Password: ");
+            currUser = loginManager.login(username, password);
+            if (currUser == null) {
+                TUI.println("Username or password is incorrect.");
+            }
+            else
+            {
+                TUI.println("Logged in successfully. \n");
+                break;
+            }
+        }
+
+    }
     public int mainMenu(){
         //Print user info
         TUI.println("1. Add Transaction " +
                 "\n2. View Transaction History " +
                 "\n3. Add Goal " +
                 "\n4. View Goals " +
-                "\n5. Exit ");
-        return TUI.inputMenuOption("What would you like to do?",1,5);
+                "\n5. Remove Goal " +
+                "\n6. Complete Goal" +
+                "\n7. Remove Transaction " +
+                "\n8. Save and Exit ");
+        return TUI.inputMenuOption("What would you like to do?",1,8);
     }
     /**
      * Asks the User for Financial Goal Parameters and then adds that goal to the user
@@ -127,6 +179,25 @@ public class FinanceController
         FileManager.writeUserData(currUser);
         loginManager.logout();
     }
+    public void completeGoal(){
+        if(currUser.financialGoals.isEmpty()){
+            TUI.println("You have no goals set");
+        }else{
+            int i = 1;
+            for(FinancialGoal goal : currUser.financialGoals){
+                TUI.println(i + ". " + goal.toString());
+                i++;
+            }
+            int goalSelect = Console.getIntInput("Which goal would you like to complete?", 1, i);
+            if(currUser.financialGoals.get(goalSelect-1).getIsComplete()){
+                TUI.println("You have already completed this goal");
+            }else {
+                currUser.financialGoals.get(goalSelect - 1).setIsComplete(true);
+                TUI.println("Your goal has been marked as complete");
+            }
+        }
+    }
+
 
     /**
      * Asks the user for a int input which goal they would like to remove after printing all current user goals. Then it removes goal based on the corresponding number.
@@ -170,5 +241,24 @@ public class FinanceController
                 TUI.println("Invalid goal number");
             }
         }
+    }
+
+    public void viewTransactionHistory()
+    {
+
+    }
+
+    public void viewGoals()
+    {
+
+    }
+
+    public void createUserAccount()
+    {
+        String username = Console.getStringInput("Enter your username: ");
+        String password = Console.getStringInput("Enter your password: ");
+        String name = Console.getStringInput("Enter your Full Name: ");
+        double money = Console.getDoubleInput("Enter your Net Worth: ");
+        loginManager.createAccount(name, username, password, money);
     }
 }
