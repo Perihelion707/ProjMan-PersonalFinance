@@ -20,8 +20,8 @@ public class FinanceController
             {
                 case 1 -> login();
                 case 2 -> createUserAccount();
-
             }
+            if (userChoice == 3) {break;}
             while (true) {
                 userChoice = mainMenu();
 
@@ -31,7 +31,7 @@ public class FinanceController
                     case 3 -> addGoal();
                     case 4 -> viewGoals();
                     case 5 -> removeGoal();
-                    case 6 -> removeGoal(); // change this to complete goal
+                    case 6 -> completeGoal();
                     case 7 -> removeTransaction();
                     case 8 -> saveAndLogout();
                     default -> mainMenu();
@@ -42,7 +42,6 @@ public class FinanceController
                     break;
                 }
             }
-            break; //remove this later
         }
     }
     public void login()
@@ -65,7 +64,7 @@ public class FinanceController
     }
     public int mainMenu(){
         //Print user info
-        TUI.println("1. Add Transaction " +
+        TUI.println("\n1. Add Transaction " +
                 "\n2. View Transaction History " +
                 "\n3. Add Goal " +
                 "\n4. View Goals " +
