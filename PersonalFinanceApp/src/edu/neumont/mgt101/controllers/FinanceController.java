@@ -4,6 +4,7 @@ import edu.neumont.mgt101.models.FinancialGoal;
 import edu.neumont.mgt101.models.Transaction;
 import edu.neumont.mgt101.models.TransactionType;
 import edu.neumont.mgt101.models.User;
+import edu.neumont.mgt101.view.Console;
 import edu.neumont.mgt101.view.TUI;
 
 public class FinanceController
@@ -103,6 +104,7 @@ public class FinanceController
                     Transaction transaction = new Transaction(transactionType, transactionName, description, money);
                     currUser.transactions.add(transaction);
                     TUI.println("Transaction stored");
+                    currUser.setMoney(currUser.getMoney() + money);
                     break;
                 }
                 else
@@ -110,6 +112,7 @@ public class FinanceController
                     Transaction transaction = new Transaction(transactionType, transactionName, money);
                     currUser.transactions.add(transaction);
                     TUI.println("Transaction stored");
+                    currUser.setMoney(currUser.getMoney() + money);
                     break;
                 }
             }
@@ -123,5 +126,49 @@ public class FinanceController
     {
         FileManager.writeUserData(currUser);
         loginManager.logout();
+    }
+
+    /**
+     * Asks the user for a int input which goal they would like to remove after printing all current user goals. Then it removes goal based on the corresponding number.
+     */
+    public void removeGoal()
+    {
+        while(true) {
+            try {
+                TUI.println("Which goal would you like to remove? (Just type the number)");
+                for (int i = 1; i <= currUser.financialGoals.size(); i++) {
+                    TUI.println(i + ". " + currUser.financialGoals.get(i).getGoalName());
+                }
+                int choice = Console.getIntInput("\n");
+                currUser.financialGoals.remove(choice);
+                break;
+            }
+            catch (Exception e) {
+                TUI.println("Invalid goal number");
+            }
+        }
+    }
+
+    /**
+     * Should only be used if the user added a transaction by accident or messed it up
+     * Asks the user for a int input which transaction they would like to remove after printing all current user transaction. Then it removes transaction based on the corresponding number. It also undoes the money change to the user.
+     */
+    public void removeTransaction()
+    {
+        while(true) {
+            try {
+                TUI.println("Which transaction would you like to remove? (Just type the number)");
+                for (int i = 1; i <= currUser.transactions.size(); i++) {
+                    TUI.println(i + ". " + currUser.transactions.get(i).getTransactionName());
+                }
+                int choice = Console.getIntInput("\n");
+                currUser.setMoney(currUser.getMoney() - currUser.transactions.get(choice).getMoneyAmount());
+                currUser.transactions.remove(choice);
+                break;
+            }
+            catch (Exception e) {
+                TUI.println("Invalid goal number");
+            }
+        }
     }
 }
