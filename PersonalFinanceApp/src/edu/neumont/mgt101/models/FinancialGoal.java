@@ -65,7 +65,8 @@ public class FinancialGoal
     public String toString() {
         return "Max Spend Amount: " + moneyTarget +
                 ", Goal Name: " + goalName + '\'' +
-                ", Days lefts: " + daysLeft;
+                ", Days lefts: " + daysLeft +
+                ", Is Complete: " + isComplete;
     }
 }
 
