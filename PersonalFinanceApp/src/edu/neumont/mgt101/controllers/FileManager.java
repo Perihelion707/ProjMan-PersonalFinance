@@ -104,11 +104,11 @@ public class FileManager {
             while (reader.hasNextLine()) {
                 String line = decryptData(reader.nextLine());
                 content.append(line);
-                System.out.println(line);
             }
         } catch (FileNotFoundException fnfe) {
             fnfe.printStackTrace();
         }
+
         return content.toString();
     }
 
@@ -205,6 +205,7 @@ public class FileManager {
         );
         newUser.financialGoals = financialGoals;
         newUser.transactions = transactions;
+
         return newUser;
     }
 
@@ -217,8 +218,11 @@ public class FileManager {
         List<User> userAccounts = new ArrayList<>();
         for (String line : lines) {
             User user = parseUserFromSave(line);
+            if (user == null)
+                continue;
             userAccounts.add(user);
         }
+
         return userAccounts;
     }
 
