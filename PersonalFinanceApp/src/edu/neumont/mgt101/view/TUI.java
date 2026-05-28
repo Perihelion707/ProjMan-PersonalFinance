@@ -32,7 +32,7 @@ public class TUI {
             String input = scanner.nextLine().trim();
             try {
                 int output = Integer.parseInt(input);
-                if (output < min || output > max) {
+                if (output > min || output < max) {
                     return output;
                 } else {
                     System.out.println("That value isn't allowed. Please pick a number between " + min + "-" + max + ".");
