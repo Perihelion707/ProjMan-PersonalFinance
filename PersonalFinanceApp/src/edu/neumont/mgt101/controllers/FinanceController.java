@@ -16,12 +16,16 @@ public class FinanceController
     {
         while (true) {
             int userChoice = Console.getIntInput("What would you like to do? 1. Login 2. Create Account 3. Exit App");
-            switch (userChoice) // Need to make it so it only goes to main menu after login.
+            if (userChoice == 1)
             {
-                case 1 -> login();
-                case 2 -> createUserAccount();
+                login();
             }
-            if (userChoice == 3) {break;}
+            else if (userChoice == 2)
+            {
+                createUserAccount();
+                continue;
+            }
+            else if (userChoice == 3) {break;}
             while (true) {
                 userChoice = mainMenu();
 
@@ -72,7 +76,7 @@ public class FinanceController
                 "\n6. Complete Goal" +
                 "\n7. Remove Transaction " +
                 "\n8. Save and Exit ");
-        return TUI.inputMenuOption("What would you like to do?",1,8);
+        return TUI.inputMenuOption("What would you like to do?\n",1,8);
     }
     /**
      * Asks the User for Financial Goal Parameters and then adds that goal to the user
@@ -141,20 +145,20 @@ public class FinanceController
                     TUI.println("Invalid Transaction");
                     continue;
                 }
-                TUI.println("What is the transaction name?");
+                TUI.println("What is the transaction name?\n");
                 String transactionName = TUI.inputString();
-                TUI.println("What was the amount of money involved with the transaction?");
+                TUI.println("What was the amount of money involved with the transaction?\n");
                 String moneyString = TUI.inputString();
                 double money = Double.parseDouble(moneyString);
-                TUI.println("Would you like to add a description to the this transaction?");
+                TUI.println("Would you like to add a description to the this transaction? (y/n)\n");
                 String description = TUI.inputString();
                 if (description.equalsIgnoreCase("Y"))
                 {
-                    TUI.println("What is the description?");
+                    TUI.println("What is the description?\n");
                     description = TUI.inputString();
                     Transaction transaction = new Transaction(transactionType, transactionName, description, money);
                     currUser.transactions.add(transaction);
-                    TUI.println("Transaction stored");
+                    TUI.println("Transaction stored\n");
                     currUser.setMoney(currUser.getMoney() + money);
                     break;
                 }
@@ -162,12 +166,12 @@ public class FinanceController
                 {
                     Transaction transaction = new Transaction(transactionType, transactionName, money);
                     currUser.transactions.add(transaction);
-                    TUI.println("Transaction stored");
+                    TUI.println("Transaction stored\n");
                     currUser.setMoney(currUser.getMoney() + money);
                     break;
                 }
             }
-            catch (Exception e)
+            catch (NumberFormatException e)
             {
                 TUI.println("Invalid input type");
             }
