@@ -146,12 +146,15 @@ public class FinanceController
                 TUI.println("What was the amount of money involved with the transaction?");
                 String moneyString = TUI.inputString();
                 double money = Double.parseDouble(moneyString);
-                TUI.println("Would you like to add a description to the this transaction?");
-                String description = TUI.inputString();
-                if (description.equalsIgnoreCase("Y"))
+                //TUI.println("Would you like to add a description to the this transaction?");
+                //String description = TUI.inputString();
+                boolean wantsDescription = TUI.yesOrNoHandler("Would you like to add a description to the this transaction?");
+                //description.equalsIgnoreCase("Y")
+                if (wantsDescription)
                 {
-                    TUI.println("What is the description?");
-                    description = TUI.inputString();
+                    //TUI.println("What is the description?");
+                    String description = Console.getStringInput("What is the description?", false);
+                    //String description = TUI.inputString();
                     Transaction transaction = new Transaction(transactionType, transactionName, description, money);
                     currUser.transactions.add(transaction);
                     TUI.println("Transaction stored");
@@ -167,7 +170,7 @@ public class FinanceController
                     break;
                 }
             }
-            catch (Exception e)
+            catch (Exception NumberFormatException)
             {
                 TUI.println("Invalid input type");
             }
