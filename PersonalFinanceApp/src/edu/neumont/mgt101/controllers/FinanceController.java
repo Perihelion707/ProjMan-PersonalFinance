@@ -102,20 +102,7 @@ public class FinanceController
             }
         }
     }
-    public void changeIncome(User currUser, double income, String transactionName){
-        currUser.setMoney(income);
-        Transaction newTransaction;
-        boolean wouldLikeDescription = TUI.yesOrNoHandler("Would you like to add a description to your transaction?");
-        if(wouldLikeDescription){
-            TUI.println("Enter the description for your transaction.");
-            String description = TUI.inputString();
-            newTransaction = new Transaction(TransactionType.DEPOSIT, transactionName, description, income);
-        } else {
-            newTransaction = new Transaction(TransactionType.DEPOSIT, transactionName, income);
-        }
-        currUser.transactions.add(newTransaction);
-    }
-    public void changeExpenses(){}
+
     /**
      * Asks the user for a transaction type, name, description, and money amount. Allows user to not include description if they don't want it.
      */
