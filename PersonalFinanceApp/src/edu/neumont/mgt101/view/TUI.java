@@ -3,10 +3,10 @@ package edu.neumont.mgt101.view;
 import java.util.Scanner;
 
 public class TUI {
-    private static Scanner scanner = null;
+    private final static Scanner scanner = new Scanner(System.in);
 
     public TUI() {
-        scanner = new Scanner(System.in);
+
     }
 
     public static void println(String text) {

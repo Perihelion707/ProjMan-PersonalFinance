@@ -16,7 +16,7 @@ public class FinanceController
     {
         while (true) {
             int userChoice = Console.getIntInput("What would you like to do? 1. Login 2. Create Account 3. Exit App");
-            switch (userChoice)
+            switch (userChoice) // Need to make it so it only goes to main menu after login.
             {
                 case 1 -> login();
                 case 2 -> createUserAccount();
@@ -145,7 +145,7 @@ public class FinanceController
                 String transactionName = TUI.inputString();
                 TUI.println("What was the amount of money involved with the transaction?");
                 String moneyString = TUI.inputString();
-                float money = Float.parseFloat(moneyString);
+                double money = Double.parseDouble(moneyString);
                 TUI.println("Would you like to add a description to the this transaction?");
                 String description = TUI.inputString();
                 if (description.equalsIgnoreCase("Y"))
