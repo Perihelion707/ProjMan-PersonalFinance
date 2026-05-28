@@ -247,7 +247,15 @@ public class FinanceController
 
     public void viewTransactionHistory()
     {
-
+        if(currUser.transactions.isEmpty()){
+            TUI.println("You have done no transactions");
+        }else {
+            int i = 1;
+            for (Transaction transaction : currUser.transactions) {
+                TUI.println(i + ". " + transaction.toString());
+                i++;
+            }
+        }
     }
 
     public void viewGoals()
