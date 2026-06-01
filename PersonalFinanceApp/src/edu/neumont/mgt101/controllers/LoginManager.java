@@ -21,6 +21,7 @@ public class LoginManager {
     }
 
     public User login(String username, String password) {
+        userAccounts = FileManager.getUserAccounts();
         for  (User user : userAccounts) {
             if (user.getUserName().equals(username) && user.getPassword().equals(password)) {
                 currentUser = user;
