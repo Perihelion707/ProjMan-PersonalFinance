@@ -241,7 +241,8 @@ public class FileManager {
         for (int charIndex = 0; charIndex < data.length(); charIndex++){
             char currentChar = data.charAt(charIndex);
             if (currentChar != '\n')
-                currentChar = (char)((int) currentChar + ENCRYPTION_KEY);
+                //currentChar = (char)((int) currentChar + ENCRYPTION_KEY);
+                currentChar = (char)((int) currentChar);
             encryptedData += currentChar;
         }
         return encryptedData;
@@ -251,7 +252,9 @@ public class FileManager {
         for (int charIndex = 0; charIndex < data.length(); charIndex++){
             char currentChar = data.charAt(charIndex);
             if (currentChar != '\n')
-                currentChar = (char)((int) currentChar - ENCRYPTION_KEY);
+                currentChar = (char)((int) currentChar);
+                //currentChar = (char)((int) currentChar - ENCRYPTION_KEY);
+
             encryptedData += currentChar;
         }
         return encryptedData;
