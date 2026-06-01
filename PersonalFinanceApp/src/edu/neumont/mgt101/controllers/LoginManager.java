@@ -2,6 +2,7 @@ package edu.neumont.mgt101.controllers;
 
 import edu.neumont.mgt101.models.User;
 
+import java.sql.SQLOutput;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -9,7 +10,7 @@ import java.util.List;
 public class LoginManager {
     private final String LOGIN_LOG = "./LoginLog.txt";
 
-    private List<User> userAccounts;
+    private List<User> userAccounts = FileManager.getUserAccounts();
     private User currentUser = null;
 
     public User getCurrentUser() {
@@ -21,7 +22,7 @@ public class LoginManager {
     }
 
     public User login(String username, String password) {
-        userAccounts = FileManager.getUserAccounts();
+
         for  (User user : userAccounts) {
             if (user.getUserName().equals(username) && user.getPassword().equals(password)) {
                 currentUser = user;

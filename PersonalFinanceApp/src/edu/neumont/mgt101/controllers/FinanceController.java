@@ -4,31 +4,28 @@ import edu.neumont.mgt101.models.FinancialGoal;
 import edu.neumont.mgt101.models.Transaction;
 import edu.neumont.mgt101.models.TransactionType;
 import edu.neumont.mgt101.models.User;
-import edu.neumont.mgt101.view.Console;
 import edu.neumont.mgt101.view.TUI;
 
-public class FinanceController
-{
+public class FinanceController {
     private final LoginManager loginManager = new LoginManager();
     private User currUser;
 
-    public void run()
-    {
+    public void run() {
         while (true) {
-            int userChoice = Console.getIntInput("What would you like to do? 1. Login 2. Create Account 3. Exit App");
-            if (userChoice == 1)
-            {
+            String[] startOptions = {"Login", "Create Account", "Exit App"};
+            int userChoice = TUI.promptMenuSelection("Welcome Screen", startOptions);
+
+            if (userChoice == 1) {
                 login();
-            }
-            else if (userChoice == 2)
-            {
+            } else if (userChoice == 2) {
                 createUserAccount();
                 continue;
+            } else if (userChoice == 3) {
+                break;
             }
-            else if (userChoice == 3) {break;}
-            while (true) {
-                userChoice = mainMenu();
 
+            do {
+                userChoice = mainMenu();
                 switch (userChoice) {
                     case 1 -> addTransaction();
                     case 2 -> viewTransactionHistory();
@@ -38,251 +35,175 @@ public class FinanceController
                     case 6 -> completeGoal();
                     case 7 -> removeTransaction();
                     case 8 -> saveAndLogout();
-                    default -> mainMenu();
                 }
-
-                if (userChoice == 8)
-                {
-                    break;
-                }
-            }
+            } while (userChoice != 8);
         }
     }
-    public void login()
-    {
-        while (true)
-        {
-            String username = Console.getStringInput("Enter Username: ");
-            String password = Console.getStringInput("Enter Password: ");
+
+    public void login() {
+        while (true) {
+            String username = TUI.readString("Enter Username: ");
+            String password = TUI.readString("Enter Password: ");
             currUser = loginManager.login(username, password);
+
             if (currUser == null) {
-                TUI.println("Username or password is incorrect.");
-            }
-            else
-            {
-                TUI.println("Logged in successfully. \n");
+                TUI.showError("Username or password is incorrect.");
+            } else {
+                TUI.showSuccess("Logged in successfully.\n");
                 break;
             }
         }
-
     }
-    public int mainMenu(){
-        //Print user info
-        TUI.println("\n1. Add Transaction " +
-                "\n2. View Transaction History " +
-                "\n3. Add Goal " +
-                "\n4. View Goals " +
-                "\n5. Remove Goal " +
-                "\n6. Complete Goal" +
-                "\n7. Remove Transaction " +
-                "\n8. Save and Exit ");
-        return TUI.inputMenuOption("What would you like to do?\n",1,8);
+
+    public int mainMenu() {
+        TUI.displayDashboard(currUser.getName(), currUser.getMoney());
+
+        String[] menuOptions = {
+                "Add Transaction", "View Transaction History", "Add Goal",
+                "View Goals", "Remove Goal", "Complete Goal",
+                "Remove Transaction", "Save and Logout"
+        };
+        return TUI.promptMenuSelection("Main Menu", menuOptions);
     }
-    /**
-     * Asks the User for Financial Goal Parameters and then adds that goal to the user
-     */
-    public void addGoal()
-    {
-        while (true)
-        {
-            try {
-                TUI.println("What is the max amount of money you are allowing yourself to spend during this goal");
-                String goalMoney = TUI.inputString();
-                int goalAmount = Integer.parseInt(goalMoney);
-                TUI.println("What do you want this goal to be named");
-                String goalName = TUI.inputString();
-                TUI.println("How many days should this goal last? \n");
-                String goalLength = TUI.inputString();
-                int goalDays = Integer.parseInt(goalLength);
 
-                FinancialGoal userGoal = new FinancialGoal(goalAmount, goalName, goalDays, false);
-                currUser.financialGoals.add(userGoal);
-                break;
+    public void addGoal() {
+        int goalAmount = TUI.readInt("What is the max amount of money you are allowing yourself to spend during this goal?");
+        String goalName = TUI.readString("What do you want this goal to be named?");
+        int goalDays = TUI.readInt("How many days should this goal last?");
 
-            }
-            catch (Exception e)
-            {
-                TUI.println(e.getMessage());
+        FinancialGoal userGoal = new FinancialGoal(goalAmount, goalName, goalDays, false);
+        currUser.financialGoals.add(userGoal);
+        TUI.showSuccess("Goal added successfully!");
+    }
+
+    public void addTransaction() {
+        TransactionType transactionType = null;
+
+        while (transactionType == null) {
+            String transactionString = TUI.readString("What Type is this Transaction? (D/W)").toUpperCase();
+            if (transactionString.equals("D")) {
+                transactionType = TransactionType.DEPOSIT;
+            } else if (transactionString.equals("W")) {
+                transactionType = TransactionType.WITHDRAWAL;
+            } else {
+                TUI.showError("Invalid Transaction Type. Choose D or W.");
             }
         }
-    }
-    public void changeIncome(User currUser, double income, String transactionName){
-        currUser.setMoney(income);
-        Transaction newTransaction;
-        boolean wouldLikeDescription = TUI.yesOrNoHandler("Would you like to add a description to your transaction?");
-        if(wouldLikeDescription){
-            TUI.println("Enter the description for your transaction.");
-            String description = TUI.inputString();
-            newTransaction = new Transaction(TransactionType.DEPOSIT, transactionName, description, income);
+
+        String transactionName = TUI.readString("What is the transaction name?");
+        double money = TUI.readDouble("What was the amount of money involved with the transaction?");
+
+        boolean wantsDescription = TUI.readBoolean("Would you like to add a description to this transaction?", "Yes", "No");
+        Transaction transaction;
+
+        if (wantsDescription) {
+            String description = TUI.readString("What is the description?");
+            transaction = new Transaction(transactionType, transactionName, description, money);
         } else {
-            newTransaction = new Transaction(TransactionType.DEPOSIT, transactionName, income);
+            transaction = new Transaction(transactionType, transactionName, money);
         }
-        currUser.transactions.add(newTransaction);
+
+        currUser.transactions.add(transaction);
+        currUser.setMoney(currUser.getMoney() + money);
+        TUI.showSuccess("Transaction stored successfully.");
     }
-    public void changeExpenses(){}
-    /**
-     * Asks the user for a transaction type, name, description, and money amount. Allows user to not include description if they don't want it.
-     */
-    public void addTransaction()
-    {
-        while(true)
-        {
-            try
-            {
-                TUI.println("What Type is this Transaction? (D/W)");
-                String transactionString = TUI.inputString();
-                TransactionType transactionType;
-                if (transactionString.equalsIgnoreCase("D"))
-                {
-                    transactionType = TransactionType.DEPOSIT;
-                }
-                else if (transactionString.equalsIgnoreCase("W"))
-                {
-                    transactionType = TransactionType.WITHDRAWAL;
-                }
-                else
-                {
-                    TUI.println("Invalid Transaction");
-                    continue;
-                }
-                TUI.println("What is the transaction name?");
-                String transactionName = TUI.inputString();
-                TUI.println("What was the amount of money involved with the transaction?");
-                String moneyString = TUI.inputString();
-                double money = Double.parseDouble(moneyString);
-                //TUI.println("Would you like to add a description to the this transaction?");
-                //String description = TUI.inputString();
-                boolean wantsDescription = TUI.yesOrNoHandler("Would you like to add a description to the this transaction?");
-                //description.equalsIgnoreCase("Y")
-                if (wantsDescription)
-                {
-                    //TUI.println("What is the description?");
-                    String description = Console.getStringInput("What is the description?", false);
-                    //String description = TUI.inputString();
-                    Transaction transaction = new Transaction(transactionType, transactionName, description, money);
-                    currUser.transactions.add(transaction);
-                    TUI.println("Transaction stored");
-                    currUser.setMoney(currUser.getMoney() + money);
-                    break;
-                }
-                else
-                {
-                    Transaction transaction = new Transaction(transactionType, transactionName, money);
-                    currUser.transactions.add(transaction);
-                    TUI.println("Transaction stored");
-                    currUser.setMoney(currUser.getMoney() + money);
-                    break;
-                }
-            }
-            catch (Exception NumberFormatException)
-            {
-                TUI.println("Invalid input type");
-            }
+
+    public void completeGoal() {
+        if (currUser.financialGoals.isEmpty()) {
+            TUI.showWarning("You have no goals set.");
+            return;
+        }
+
+        for (int i = 0; i < currUser.financialGoals.size(); i++) {
+            TUI.showMessage((i + 1) + ". " + currUser.financialGoals.get(i));
+        }
+
+        int goalSelect = TUI.readIntRange("Which goal would you like to complete?", 1, currUser.financialGoals.size());
+        FinancialGoal selectedGoal = currUser.financialGoals.get(goalSelect - 1);
+
+        if (selectedGoal.getIsComplete()) {
+            TUI.showWarning("You have already completed this goal.");
+        } else {
+            selectedGoal.setIsComplete(true);
+            TUI.showSuccess("Your goal has been marked as complete!");
         }
     }
-    public void saveAndLogout()
-    {
-        FileManager.writeUserData(currUser);
-        loginManager.logout();
+
+    public void removeGoal() {
+        if (currUser.financialGoals.isEmpty()) {
+            TUI.showWarning("You have no goals set.");
+            return;
+        }
+
+        TUI.showMessage("Which goal would you like to remove? (Just type the number)");
+        for (int i = 0; i < currUser.financialGoals.size(); i++) {
+            TUI.showMessage((i + 1) + ". " + currUser.financialGoals.get(i).getGoalName());
+        }
+
+        int choice = TUI.readIntRange("Enter number:", 1, currUser.financialGoals.size());
+        currUser.financialGoals.remove(choice - 1);
+        TUI.showSuccess("Goal successfully removed.");
     }
-    public void completeGoal(){
-        if(currUser.financialGoals.isEmpty()){
-            TUI.println("You have no goals set");
-        }else{
-            int i = 1;
-            for(FinancialGoal goal : currUser.financialGoals){
-                TUI.println(i + ". " + goal.toString());
+
+    public void removeTransaction() {
+        if (currUser.transactions.isEmpty()) {
+            TUI.showWarning("You have no transactions to remove.");
+            return;
+        }
+
+        TUI.showMessage("Which transaction would you like to remove? (Just type the number)");
+        for (int i = 0; i < currUser.transactions.size(); i++) {
+            TUI.showMessage((i + 1) + ". " + currUser.transactions.get(i).getTransactionName());
+        }
+
+        int choice = TUI.readIntRange("Enter number:", 1, currUser.transactions.size());
+        int actualIndex = choice - 1;
+
+        currUser.setMoney(currUser.getMoney() - currUser.transactions.get(actualIndex).getMoneyAmount());
+        currUser.transactions.remove(actualIndex);
+        TUI.showSuccess("Transaction successfully removed.");
+    }
+
+    public void viewTransactionHistory() {
+        TUI.displayTransactions(currUser.transactions);
+    }
+
+    public void viewGoals() {
+        if (currUser.financialGoals.isEmpty()) {
+            TUI.showWarning("You have no goals set.");
+            return;
+        }
+
+        TUI.printHeader("Completed Goals");
+        int i = 1;
+        for (FinancialGoal goal : currUser.financialGoals) {
+            if (goal.getIsComplete()) {
+                TUI.showSuccess(i + ". " + goal);
                 i++;
             }
-            int goalSelect = Console.getIntInput("Which goal would you like to complete?", 1, i);
-            if(currUser.financialGoals.get(goalSelect-1).getIsComplete()){
-                TUI.println("You have already completed this goal");
-            }else {
-                currUser.financialGoals.get(goalSelect - 1).setIsComplete(true);
-                TUI.println("Your goal has been marked as complete");
+        }
+
+        TUI.printHeader("Incomplete Goals");
+        for (FinancialGoal goal : currUser.financialGoals) {
+            if (!goal.getIsComplete()) {
+                TUI.showWarning(i + ". " + goal);
+                i++;
             }
         }
     }
 
-
-    /**
-     * Asks the user for a int input which goal they would like to remove after printing all current user goals. Then it removes goal based on the corresponding number.
-     */
-    public void removeGoal()
-    {
-        while(true) {
-            try {
-                TUI.println("Which goal would you like to remove? (Just type the number)");
-                for (int i = 1; i <= currUser.financialGoals.size(); i++) {
-                    TUI.println(i + ". " + currUser.financialGoals.get(i).getGoalName());
-                }
-                int choice = Console.getIntInput("\n");
-                currUser.financialGoals.remove(choice);
-                break;
-            }
-            catch (Exception e) {
-                TUI.println("Invalid goal number");
-            }
-        }
-    }
-
-    /**
-     * Should only be used if the user added a transaction by accident or messed it up
-     * Asks the user for a int input which transaction they would like to remove after printing all current user transaction. Then it removes transaction based on the corresponding number. It also undoes the money change to the user.
-     */
-    public void removeTransaction()
-    {
-        while(true) {
-            try {
-                TUI.println("Which transaction would you like to remove? (Just type the number)");
-                for (int i = 1; i <= currUser.transactions.size(); i++) {
-                    TUI.println(i + ". " + currUser.transactions.get(i).getTransactionName());
-                }
-                int choice = Console.getIntInput("\n");
-                currUser.setMoney(currUser.getMoney() - currUser.transactions.get(choice).getMoneyAmount());
-                currUser.transactions.remove(choice);
-                break;
-            }
-            catch (Exception e) {
-                TUI.println("Invalid goal number");
-            }
-        }
-    }
-
-    public void viewTransactionHistory()
-    {
-
-    }
-
-    public void viewGoals()
-    {
-        if(currUser.financialGoals.isEmpty()){
-            TUI.println("You have no goals set");
-        }else {
-            int i = 1;
-            TUI.println("Completed Goals");
-            for (FinancialGoal goal : currUser.financialGoals) {
-                if(goal.getIsComplete()) {
-                    TUI.println(i + ". " + goal.toString());
-                    i++;
-                }
-            }
-            TUI.println("Incomplete Goals");
-            for (FinancialGoal goal : currUser.financialGoals) {
-                if(!goal.getIsComplete()) {
-                    TUI.println(i + ". " + goal.toString());
-                    i++;
-                }
-            }
-        }
-    }
-
-    public void createUserAccount()
-    {
-        String username = Console.getStringInput("Enter your username: ");
-        String password = Console.getStringInput("Enter your password: ");
-        String name = Console.getStringInput("Enter your Full Name: ");
-        double money = Console.getDoubleInput("Enter your Net Worth: ");
+    public void createUserAccount() {
+        String username = TUI.readString("Enter your username: ");
+        String password = TUI.readString("Enter your password: ");
+        String name = TUI.readString("Enter your Full Name: ");
+        double money = TUI.readDouble("Enter your Net Worth: ");
         loginManager.createAccount(name, username, password, money);
+        TUI.showSuccess("Account created successfully!");
+    }
+
+    public void saveAndLogout() {
+        FileManager.writeUserData(currUser);
+        loginManager.logout();
+        TUI.showMessage("Logged out safely.");
     }
 }
