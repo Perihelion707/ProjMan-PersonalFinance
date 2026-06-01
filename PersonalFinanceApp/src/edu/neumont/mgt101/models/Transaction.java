@@ -38,7 +38,7 @@ public class Transaction {
     public void setTransactionDescription(String transactionDescription) {
         if (transactionDescription == null || transactionDescription.isBlank())
         {
-            throw new IllegalArgumentException("transactionDescription cannot be null or blank");
+            transactionDescription = "No Description Avaliable";
         }
         this.transactionDescription = transactionDescription;
     }

@@ -177,6 +177,7 @@ public class FinanceController {
         TUI.printHeader("Completed Goals");
         int i = 1;
         for (FinancialGoal goal : currUser.financialGoals) {
+            if (goal == null) continue;
             if (goal.getIsComplete()) {
                 TUI.showSuccess(i + ". " + goal);
                 i++;
@@ -185,6 +186,7 @@ public class FinanceController {
 
         TUI.printHeader("Incomplete Goals");
         for (FinancialGoal goal : currUser.financialGoals) {
+            if (goal == null) continue;
             if (!goal.getIsComplete()) {
                 TUI.showWarning(i + ". " + goal);
                 i++;
@@ -202,7 +204,7 @@ public class FinanceController {
     }
 
     public void saveAndLogout() {
-        FileManager.writeUserData(currUser);
+        FileManager.writeUserData(currUser, false);
         loginManager.logout();
         TUI.showMessage("Logged out safely.");
     }

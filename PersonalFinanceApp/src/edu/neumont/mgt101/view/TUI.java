@@ -25,6 +25,7 @@ public class TUI {
 
         int id = 1;
         for (Transaction t : transactions) {
+            if (t == null) continue;
             Console.TextColor moneyColor = t.getMoneyAmount() >= 0 ? Console.TextColor.GREEN : Console.TextColor.RED;
 
             System.out.printf(" %-4d | %-8s | %-20s | ", id++, t.getTransactionType(), t.getTransactionName());
