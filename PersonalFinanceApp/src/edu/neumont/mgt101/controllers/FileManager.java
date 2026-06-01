@@ -68,7 +68,6 @@ public class FileManager {
             }
         }
         sb.append(']');
-        //sb.append("\n");
         writeData(USER_SAVE_FILE, sb.toString(), append);
     }
 
@@ -89,7 +88,7 @@ public class FileManager {
         try {
             FileWriter fw = new FileWriter(path, append);
             fw.write(encryptData(data));
-            fw.write("<\n");
+            fw.write(encryptData("<\n"));
             fw.close();
         }catch(IOException e){
             e.printStackTrace();
@@ -212,7 +211,7 @@ public class FileManager {
     public static List<User> getUserAccounts(){
         String save = readFile(USER_SAVE_FILE);
         //System.out.println("SAVE:" + save);
-        String[] lines = save.split("<");
+        String[] lines = save.split("%");
         if (lines.length < 1)
             return null;
         List<User> userAccounts = new ArrayList<>();
@@ -241,8 +240,8 @@ public class FileManager {
         for (int charIndex = 0; charIndex < data.length(); charIndex++){
             char currentChar = data.charAt(charIndex);
             if (currentChar != '\n')
-                //currentChar = (char)((int) currentChar + ENCRYPTION_KEY);
-                currentChar = (char)((int) currentChar);
+                currentChar = (char)((int) currentChar + ENCRYPTION_KEY);
+                //currentChar = (char)((int) currentChar);
             encryptedData += currentChar;
         }
         return encryptedData;
@@ -252,8 +251,8 @@ public class FileManager {
         for (int charIndex = 0; charIndex < data.length(); charIndex++){
             char currentChar = data.charAt(charIndex);
             if (currentChar != '\n')
-                currentChar = (char)((int) currentChar);
-                //currentChar = (char)((int) currentChar - ENCRYPTION_KEY);
+                //currentChar = (char)((int) currentChar);
+                currentChar = (char)((int) currentChar - ENCRYPTION_KEY);
 
             encryptedData += currentChar;
         }
