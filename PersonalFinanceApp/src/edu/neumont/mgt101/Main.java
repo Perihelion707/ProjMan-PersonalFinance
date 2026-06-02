@@ -9,8 +9,6 @@ import java.io.FilterOutputStream;
 
 public class Main {
     public static void main() {
-        //todo: Remove after testing is over
-        System.out.println(FileManager.readFile("Users"));
         new FinanceController().run();
 
     }
