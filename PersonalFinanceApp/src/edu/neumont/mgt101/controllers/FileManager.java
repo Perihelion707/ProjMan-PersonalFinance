@@ -97,6 +97,13 @@ public class FileManager {
 
     public static String readFile(String path){
         File file = new File(path);
+        if (!file.exists()){
+            try{
+                file.createNewFile();
+            }catch (IOException e){
+                e.printStackTrace();
+            }
+        }
         StringBuilder content = new StringBuilder();
         try (Scanner reader = new Scanner(file)) {
 
