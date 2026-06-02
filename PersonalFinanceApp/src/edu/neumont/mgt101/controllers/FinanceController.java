@@ -104,7 +104,13 @@ public class FinanceController {
         }
 
         currUser.transactions.add(transaction);
-        currUser.setMoney(currUser.getMoney() + money);
+        if (transactionType == TransactionType.DEPOSIT) {
+            currUser.setMoney(currUser.getMoney() + money);
+        }
+        else
+        {
+            currUser.setMoney(currUser.getMoney() - money);
+        }
         TUI.showSuccess("Transaction stored successfully.");
     }
 
@@ -113,13 +119,27 @@ public class FinanceController {
             TUI.showWarning("You have no goals set.");
             return;
         }
-
+        boolean validValue = false;
+        for (int i = 0; i < currUser.financialGoals.size(); i++)
+        {
+            if (currUser.financialGoals.get(i) != null && !currUser.financialGoals.get(i).getIsComplete())
+            {
+                validValue = true;
+                break;
+            }
+        }
+        if (!validValue)
+        {
+            TUI.showWarning("You have no goals set.");
+            return;
+        }
         for (int i = 0; i < currUser.financialGoals.size(); i++) {
-            TUI.showMessage((i + 1) + ". " + currUser.financialGoals.get(i));
+            if (currUser.financialGoals.get(i) == null || currUser.financialGoals.get(i).getIsComplete()) {continue;}
+            TUI.showMessage((i) + ". " + currUser.financialGoals.get(i));
         }
 
-        int goalSelect = TUI.readIntRange("Which goal would you like to complete?", 1, currUser.financialGoals.size());
-        FinancialGoal selectedGoal = currUser.financialGoals.get(goalSelect - 1);
+        int goalSelect = TUI.readIntRange("Which goal would you like to complete?", 1, currUser.financialGoals.size() - 1);
+        FinancialGoal selectedGoal = currUser.financialGoals.get(goalSelect);
 
         if (selectedGoal.getIsComplete()) {
             TUI.showWarning("You have already completed this goal.");
@@ -134,14 +154,31 @@ public class FinanceController {
             TUI.showWarning("You have no goals set.");
             return;
         }
-
-        TUI.showMessage("Which goal would you like to remove? (Just type the number)");
+        boolean validValue = false;
+        for (int i = 0; i < currUser.financialGoals.size(); i++)
+        {
+            if (currUser.financialGoals.get(i) != null)
+            {
+                validValue = true;
+                break;
+            }
+        }
+        if (validValue)
+        {
+            TUI.showMessage("Which goal would you like to remove? (Just type the number)");
+        }
+        else
+        {
+            TUI.showWarning("You have no goals set.");
+            return;
+        }
         for (int i = 0; i < currUser.financialGoals.size(); i++) {
-            TUI.showMessage((i + 1) + ". " + currUser.financialGoals.get(i).getGoalName());
+            if (currUser.financialGoals.get(i) == null) {continue;}
+            TUI.showMessage((i) + ". " + currUser.financialGoals.get(i).getGoalName());
         }
 
         int choice = TUI.readIntRange("Enter number:", 1, currUser.financialGoals.size());
-        currUser.financialGoals.remove(choice - 1);
+        currUser.financialGoals.remove(choice);
         TUI.showSuccess("Goal successfully removed.");
     }
 
@@ -150,16 +187,39 @@ public class FinanceController {
             TUI.showWarning("You have no transactions to remove.");
             return;
         }
-
-        TUI.showMessage("Which transaction would you like to remove? (Just type the number)");
+        boolean validValue = false;
+        for (int i = 0; i < currUser.transactions.size(); i++)
+        {
+            if (currUser.transactions.get(i) != null)
+            {
+                validValue = true;
+                break;
+            }
+        }
+        if (validValue)
+        {
+            TUI.showMessage("Which transaction would you like to remove? (Just type the number)");
+        }
+        else {
+            TUI.showWarning("You have no transactions.");
+            return;
+        }
         for (int i = 0; i < currUser.transactions.size(); i++) {
-            TUI.showMessage((i + 1) + ". " + currUser.transactions.get(i).getTransactionName());
+            if (currUser.transactions.get(i) == null) {continue;}
+            TUI.showMessage((i) + ". " + currUser.transactions.get(i).getTransactionName());
         }
 
         int choice = TUI.readIntRange("Enter number:", 1, currUser.transactions.size());
-        int actualIndex = choice - 1;
+        int actualIndex = choice;
+        if (currUser.transactions.get(actualIndex).getTransactionType() == TransactionType.DEPOSIT)
+        {
+            currUser.setMoney(currUser.getMoney() - currUser.transactions.get(actualIndex).getMoneyAmount());
+        }
+        else
+        {
+            currUser.setMoney(currUser.getMoney() + currUser.transactions.get(actualIndex).getMoneyAmount());
+        }
 
-        currUser.setMoney(currUser.getMoney() - currUser.transactions.get(actualIndex).getMoneyAmount());
         currUser.transactions.remove(actualIndex);
         TUI.showSuccess("Transaction successfully removed.");
     }
