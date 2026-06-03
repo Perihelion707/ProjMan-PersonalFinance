@@ -9,6 +9,7 @@ import java.io.FilterOutputStream;
 
 public class Main {
     public static void main() {
+        //System.out.println(FileManager.readFile("Users"));
         new FinanceController().run();
 
     }

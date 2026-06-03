@@ -149,6 +149,7 @@ public class FileManager {
         if (transactionStr.isEmpty())
             return null;
         transactionStr = transactionStr.replace(">", "");
+        transactionStr = transactionStr.replace("<", "");
         String[] attributes = transactionStr.split("-");
         if (attributes.length != 4)
             return null;
@@ -162,13 +163,14 @@ public class FileManager {
         }catch (IllegalArgumentException e){
             return null;
         }
-
-        return new Transaction(
+        Transaction transaction = new Transaction(
                 transactionType,
                 transactionName,
                 transactionDescription,
                 transactionMoneyAmount
         );
+        //System.out.println(transaction);
+        return transaction;
     }
 
     private static User parseUserFromSave(String save) {
